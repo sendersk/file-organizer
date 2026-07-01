@@ -1,0 +1,57 @@
+categories:
+  Images:
+    - .jpg
+    - .jpeg
+    - .png
+    - .gif
+    - .bmp
+    - .webp
+
+  Documents:
+    - .pdf
+    - .doc
+    - .docx
+    - .xls
+    - .xlsx
+    - .ppt
+    - .pptx
+
+  Text:
+    - .txt
+    - .md
+    - .rtf
+
+  Videos:
+    - .mp4
+    - .avi
+    - .mov
+    - .mkv
+
+  Audio:
+    - .mp3
+    - .wav
+    - .flac
+
+  Archives:
+    - .zip
+    - .rar
+    - .7z
+    - .tar
+    - .gz
+
+  Code:
+    - .py
+    - .js
+    - .ts
+    - .java
+    - .cpp
+    - .c
+    - .cs
+    - .html
+    - .css
+    - .json
+    - .yaml
+    - .yml
+    - .xml
+
+  Other: []
