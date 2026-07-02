@@ -55,3 +55,48 @@ def test_should_ignore_extension_case() -> None:
     organizer = FileOrganizer(create_config())
 
     assert organizer.get_category(Path("PHOTO.JPG")) == "Images"
+
+
+def test_should_move_file_to_category_directory(tmp_path: Path) -> None:
+    """Should move file into the correct category directory."""
+
+    source_file = tmp_path / "photo.jpg"
+    source_file.write_text("image")
+
+    organizer = FileOrganizer(create_config())
+
+    destination = organizer.move_file(source_file, tmp_path)
+
+    assert destination.exists()
+    assert destination.parent.name == "Images"
+    assert destination.name == "photo.jpg"
+
+    assert not source_file.exists()
+
+
+def test_should_create_destination_directory(tmp_path: Path) -> None:
+    """Should automatically create destination directory."""
+
+    source_file = tmp_path / "document.pdf"
+    source_file.write_text("content")
+
+    organizer = FileOrganizer(create_config())
+
+    destination = organizer.move_file(source_file, tmp_path)
+
+    assert destination.parent.exists()
+    assert destination.parent.name == "Documents"
+
+
+def test_should_move_unknown_extension_to_other(tmp_path: Path) -> None:
+    """Unknown extensions should be moved into Other directory."""
+
+    source_file = tmp_path / "archive.xyz"
+    source_file.write_text("content")
+
+    organizer = FileOrganizer(create_config())
+
+    destination = organizer.move_file(source_file, tmp_path)
+
+    assert destination.parent.name == "Other"
+    assert destination.exists()
