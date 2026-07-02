@@ -1,3 +1,5 @@
+import shutil
+
 from pathlib import Path
 
 from file_organizer.models import RulesConfig
@@ -28,3 +30,29 @@ class FileOrganizer:
                 return category
 
         return "Other"
+
+    def move_file(self, file_path: Path, destination_root: Path) -> Path:
+        """
+        Move a file into its target category directory.
+
+        The destination directory is created automatically if it
+        does not already exist.
+
+        Args:
+            file_path: File to move.
+            destination_root: Root directory for organized files.
+
+        Returns:
+            Path to the moved file.
+        """
+
+        category = self.get_category(file_path)
+
+        destination_directory = destination_root / category
+        destination_directory.mkdir(parents=True, exist_ok=True)
+
+        destination_file = destination_directory / file_path.name
+
+        shutil.move(str(file_path), str(destination_file))
+
+        return destination_file
