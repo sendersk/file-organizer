@@ -16,7 +16,7 @@ def test_cli_dry_run(tmp_path: Path) -> None:
     file.write_text("data")
 
     # Act
-    result = runner.invoke(app, [app, str(tmp_path), "--dry-run"])
+    result = runner.invoke(app, ["organize", str(tmp_path), "--dry-run"])
 
     print(result.output)
     print(result.exception)
