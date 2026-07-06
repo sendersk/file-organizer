@@ -24,6 +24,11 @@ def organize(directory: Path = typer.Argument(
         resolve_path=True,
         help="Directory containing files to organize.",
     ),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Simulate organization without moving files."
+    ),
 ) -> None:
     """
     Full file organization pipeline.
@@ -41,16 +46,21 @@ def organize(directory: Path = typer.Argument(
 
     categorized: dict[str, int] = {}
 
+    typer.echo("Starting organization...\n")
+
     # Process files
     for file in files:
         category = organizer.get_category(file)
 
-        if category not in categorized:
-            categorized[category] = 0
+        categorized[category] = categorized.get(category, 0) + 1
 
-        categorized[category] += 1
+        target_path = directory / category / file.name
 
-        organizer.move_file(file, directory)
+        if dry_run:
+            typer.echo(f"[DRY-RUN] {file} -> {target_path}")
+        else:
+            organizer.move_file(file, directory)
+            typer.echo(f"MOVED: {file} -> {target_path}")
 
     # Create report
     report = OrganizationReport(
