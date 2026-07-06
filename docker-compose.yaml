@@ -1,0 +1,15 @@
+services:
+  organizer:
+    build: .
+    container_name: file-organizer
+
+    volumes:
+      - ./data:/data
+
+      - ./config:/app/config
+
+      - ./reports:/data/reports
+
+    working_dir: /data
+
+    command: ["organize", "/data"]
