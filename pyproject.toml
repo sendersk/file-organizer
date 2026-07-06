@@ -36,3 +36,6 @@ strict = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[project.scripts]
+file-organizer = "file_organizer.main:main"
