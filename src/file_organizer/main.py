@@ -3,6 +3,7 @@ import typer
 from pathlib import Path
 
 from file_organizer.config import load_config
+from file_organizer.logging import setup_logging
 from file_organizer.models import OrganizationReport
 from file_organizer.organizer import FileOrganizer
 from file_organizer.reporter import JsonReporter
@@ -34,6 +35,11 @@ def organize(directory: Path = typer.Argument(
     Full file organization pipeline.
     """
 
+    logger = setup_logging(directory / "logs" / "app.log")
+
+    logger.info("Starting organization process")
+    logger.info(f"Scanning directory: {directory}")
+
     # Load configuration
     config = load_config()
 
@@ -46,7 +52,7 @@ def organize(directory: Path = typer.Argument(
 
     categorized: dict[str, int] = {}
 
-    typer.echo("Starting organization...\n")
+    logger.info("Starting organization...\n")
 
     # Process files
     for file in files:
@@ -57,10 +63,10 @@ def organize(directory: Path = typer.Argument(
         target_path = directory / category / file.name
 
         if dry_run:
-            typer.echo(f"[DRY-RUN] {file} -> {target_path}")
+            logger.info(f"[DRY-RUN] {file} -> {target_path}")
         else:
             organizer.move_file(file, directory)
-            typer.echo(f"MOVED: {file} -> {target_path}")
+            logger.info(f"MOVED: {file} -> {target_path}")
 
     # Create report
     report = OrganizationReport(
@@ -71,9 +77,9 @@ def organize(directory: Path = typer.Argument(
     reporter = JsonReporter(directory / "reports" / "report.json")
     reporter.generate(report)
 
-    typer.echo("Organization completed successfully.")
-    typer.echo(f"Processed files: {len(files)}")
-    typer.echo(f"Report saved to: {directory / 'reports' / 'report.json'}")
+    logger.info("Organization completed successfully.")
+    logger.info(f"Processed files: {len(files)}")
+    logger.info(f"Report saved to: {directory / 'reports' / 'report.json'}")
 
 
 @app.command()
