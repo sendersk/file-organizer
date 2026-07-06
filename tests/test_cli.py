@@ -35,7 +35,7 @@ def test_cli_organize_moves_files(tmp_path: Path) -> None:
     file.write_text("data")
 
     # Act
-    result = runner.invoke(app, [str(tmp_path)])
+    result = runner.invoke(app, ["organize", str(tmp_path)])
 
     print(result.output)
     print(result.exception)
@@ -44,3 +44,13 @@ def test_cli_organize_moves_files(tmp_path: Path) -> None:
     assert result.exit_code == 0
     assert "MOVED" in result.output or "Organization completed" in result.output
     assert not file.exists()
+
+
+def test_cli_version() -> None:
+    """Show application version."""
+
+    result = runner.invoke(app, ["version"])
+
+    assert result.exit_code == 0
+    assert "File Organizer" in result.output
+    assert "0.1.0" in result.output
