@@ -76,6 +76,12 @@ def organize(directory: Path = typer.Argument(
     typer.echo(f"Report saved to: {directory / 'reports' / 'report.json'}")
 
 
+@app.command()
+def version() -> None:
+    """Display application version."""
+    typer.echo("File Organizer 0.1.0")
+
+
 def main() -> None:
     """Application entry point."""
 
